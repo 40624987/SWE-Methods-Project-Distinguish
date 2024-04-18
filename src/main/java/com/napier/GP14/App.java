@@ -22,23 +22,49 @@ public class App
         //Extract city information
         ArrayList<City> cities = a.getAllCities();
 
+        //ArrayList<Country> Ncountries = a.getNCountries(10);
+
         //List of all Countries in order of descending population
+
         //a.printCountriesinOrder(countries);
 
         //List of all Cities in order of descending population
-        //a.printCitiesinOrder(cities, countries);
+        System.out.println(
+                "===============================\n" +
+                       "All Cities in order of population\n"+
+                        "City    Country    District    Population" );
+        a.printCitiesinOrder(cities, countries);
 
         //List of all the cities in a continent organised by largest population to smallest.
+        //System.out.println(
+        //       "===============================\n" +
+         //              "All cities in continent in order of population\n"+
+         //       "City    Country    District    Population" );
         //a.printCitiesInContinentOrdered(cities, countries, "Europe");
 
         //List of all the cities in a region organised by largest population to smallest.
-        //a.printCitiesInRegionOrdered(cities, countries, "Western Africa");
+
+        //System.out.println(
+         //      "===============================\n" +
+         //            "All cities in region in order of population\n"+
+         //       "City    Country    District    Population" );
+       // a.printCitiesInRegionOrdered(cities, countries, "Western Africa");
+
 
         //List of all the cities in a country organised by largest population to smallest.
-        a.printCitiesInCountryOrdered(cities, countries, "Germany");
+        //System.out.println(
+        //       "===============================\n" +
+        //               "Cities in Country in order of population\n"+
+         //      "City    Country    District    Population" );
+
+       // a.printCitiesInCountryOrdered(cities, countries, "Germany");
 
         //List of all the cities in a district organised by largest population to smallest.
-        a.printCitiesInDistrictOrdered(cities, countries, "Saksi", "Germany");
+        //System.out.println(
+         //       "===============================\n" +
+         //               "Cities in Districts in order of population\n"+
+         //       "City    Country    District    Population" );
+            //            a.printCitiesInDistrictOrdered(cities, countries, "Rio de Janeiro");
 
 
 
@@ -135,6 +161,38 @@ public class App
         }
     }
 
+    public ArrayList<Country> getNCountries(int N) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Code, Name, Continent, Region, Population, Capital "
+                            + "FROM country" + " "
+                            + "ORDER BY Population DESC "
+                            + "LIMIT " + N;
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country cou = new Country();
+                cou.Code = rset.getString("country.Code");
+                cou.Name = rset.getString("country.Name");
+                cou.Continent = rset.getString("country.Continent");
+                cou.Region = rset.getString("country.Region");
+                cou.Population = rset.getInt("country.Population");
+                cou.Capital = rset.getString("country.Capital");
+                countries.add(cou);
+            }
+            return countries;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
     public void printCountriesinOrder(ArrayList<Country> countries){
         // Print header
         //System.out.println(String.format("%-10s %-15s %-20s %-8s", "Emp No", "First Name", "Last Name", "Salary"));
@@ -181,22 +239,55 @@ public class App
         }
     }
 
+    public ArrayList<City> getNCities(int N) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name, country.Name, District, city.Population, city.CountryCode "
+                            + "FROM city, country "
+                            + "WHERE country.Code = city.CountryCode "
+                            + "ORDER BY Population DESC "
+                            + "LIMIT "+ N;
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract city information
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cit = new City();
+                cit.Name = rset.getString("city.Name");
+                cit.CountryCode = rset.getString("city.CountryCode");
+                cit.District = rset.getString("city.District");
+                cit.Population = rset.getInt("city.Population");
+
+                cities.add(cit);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get city details");
+            return null;
+        }
+    }
+
     public void printCitiesinOrder(ArrayList<City> cities, ArrayList<Country> countries){
         // Loop over all cities in the list
-        for (City cit : cities) {
-            String countryName = new String();
-            for(Country cou: countries) {
-                if (Objects.equals(cou.Code, cit.CountryCode))
-                {
-                    countryName = cou.Name;
-                    break; // stops loop when result is found to improve efficiency
+
+
+            for (City cit : cities) {
+                for (Country cou: countries) {
+                    if (cit.CountryCode.equals(cou.Code)) {
+
+
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " ");
+
+                    }
                 }
-            }
-            System.out.println(
-                    cit.Name + " "
-                            + countryName + " "
-                            + cit.District + " "
-                            + cit.Population + " ");
 
         }
     }
@@ -204,19 +295,22 @@ public class App
     public void printCitiesInContinentOrdered(ArrayList<City> cities, ArrayList<Country> countries, String continent){
 
         for (City cit : cities) {
-            String countryName = new String();
-            for(Country cou: countries) {
-                if (Objects.equals(cou.Code, cit.CountryCode))
-                {
-                    countryName = cou.Name;
-                    break; // stops loop when result is found to improve efficiency
+        for (Country cou: countries) {
+
+        if (cou.Continent.equals(continent)) {
+                    if(cit.CountryCode .equals(cou.Code)){
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " ");
+
+
+                    }
                 }
+
             }
-            System.out.println(
-                    cit.Name + " "
-                            + countryName + " "
-                            + cit.District + " "
-                            + cit.Population + " ");
+
 
         }
     }
@@ -232,7 +326,7 @@ public class App
                                         + cou.Name + " "
                                         + cit.District + " "
                                         + cit.Population + " "
-                                        + region);
+                                       );
                     }
                 }
 
@@ -240,17 +334,18 @@ public class App
         }
     }
 
-    public void printCitiesInCountryOrdered(ArrayList<City> cities, ArrayList<Country> countries, String district){
+    public void printCitiesInCountryOrdered(ArrayList<City> cities, ArrayList<Country> countries, String country){
 
-        for (City cit: cities) {
-            if (cit.District .equals(district)){
-                for(Country cou: countries){
+        for (Country cou : countries) {
+            if (cou.Name.equals(country)){
+                for(City cit: cities){
                     if(cit.CountryCode .equals(cou.Code)){
                         System.out.println(
                                 cit.Name + " "
                                         + cou.Name + " "
                                         + cit.District + " "
-                                        + cit.Population + " ");
+                                        + cit.Population + " "
+                        );
                     }
                 }
 
@@ -258,12 +353,14 @@ public class App
         }
     }
 
-    public void printCitiesInDistrictOrdered(ArrayList<City> cities, ArrayList<Country> countries, String district, String country){
+
+    public void printCitiesInDistrictOrdered(ArrayList<City> cities, ArrayList<Country> countries, String district){
+
 
         for (City cit : cities) {
+            if (cit.District .equals(district)){
                 for(Country cou: countries){
-                    if(cou.Name .equals(country)){
-                        if (cit.District .equals(district)){
+                    if(cou.Code .equals(cit.CountryCode))
                         System.out.println(
                                 cit.Name + " "
                                         + cou.Name + " "
@@ -275,4 +372,4 @@ public class App
             }
         }
     }
-    }
+
