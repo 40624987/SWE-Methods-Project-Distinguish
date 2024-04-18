@@ -7,14 +7,13 @@ import java.util.Objects;
 public class App
 {
     public static void main(String[] args) {
-        // Create new Application and connect to database
+
+
+        // Create new Application
         App a = new App();
 
-        if (args.length < 1) {
-            a.connect("localhost:33060", 10000);
-        } else {
-            a.connect(args[0], Integer.parseInt(args[1]));
-        }
+        // Connect to database
+        a.connect();
 
 
         // Extract COUNTRY information
@@ -23,11 +22,49 @@ public class App
         //Extract city information
         ArrayList<City> cities = a.getAllCities();
 
+        //ArrayList<Country> Ncountries = a.getNCountries(10);
+
         //List of all Countries in order of descending population
+
         //a.printCountriesinOrder(countries);
 
         //List of all Cities in order of descending population
+        System.out.println(
+                "===============================\n" +
+                       "All Cities in order of population\n"+
+                        "City    Country    District    Population" );
         a.printCitiesinOrder(cities, countries);
+
+        //List of all the cities in a continent organised by largest population to smallest.
+        //System.out.println(
+        //       "===============================\n" +
+         //              "All cities in continent in order of population\n"+
+         //       "City    Country    District    Population" );
+        //a.printCitiesInContinentOrdered(cities, countries, "Europe");
+
+        //List of all the cities in a region organised by largest population to smallest.
+
+        //System.out.println(
+         //      "===============================\n" +
+         //            "All cities in region in order of population\n"+
+         //       "City    Country    District    Population" );
+       // a.printCitiesInRegionOrdered(cities, countries, "Western Africa");
+
+
+        //List of all the cities in a country organised by largest population to smallest.
+        //System.out.println(
+        //       "===============================\n" +
+        //               "Cities in Country in order of population\n"+
+         //      "City    Country    District    Population" );
+
+       // a.printCitiesInCountryOrdered(cities, countries, "Germany");
+
+        //List of all the cities in a district organised by largest population to smallest.
+        //System.out.println(
+         //       "===============================\n" +
+         //               "Cities in Districts in order of population\n"+
+         //       "City    Country    District    Population" );
+            //            a.printCitiesInDistrictOrdered(cities, countries, "Rio de Janeiro");
 
 
 
@@ -49,7 +86,7 @@ public class App
     /**
      * Connect to the MySQL database.
      */
-    public void connect(String location, int delay) {
+    public void connect() {
         try {
             // Load Database driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -58,28 +95,19 @@ public class App
             System.exit(-1);
         }
 
-        int retries = 10;
-        boolean shouldWait = false;
+        int retries = 100;
         for (int i = 0; i < retries; ++i) {
             System.out.println("Connecting to database...");
             try {
-                if (shouldWait) {
-                    // Wait a bit for db to start
-                    Thread.sleep(delay);
-                }
-
+                // Wait a bit for db to start
+                Thread.sleep(5000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://" + location
-                                + "/world?allowPublicKeyRetrieval=true&useSSL=false",
-                        "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             } catch (SQLException sqle) {
-                System.out.println("Failed to connect to database attempt " + i);
+                System.out.println("Failed to connect to database attempt " + Integer.toString(i));
                 System.out.println(sqle.getMessage());
-
-                // Let's wait before attempting to reconnect
-                shouldWait = true;
             } catch (InterruptedException ie) {
                 System.out.println("Thread interrupted? Should not happen.");
             }
@@ -121,6 +149,38 @@ public class App
                     "SELECT Code, Name, Continent, Region, Population, Capital "
                             + "FROM country" + " "
                             + "ORDER BY Population DESC";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country cou = new Country();
+                cou.Code = rset.getString("country.Code");
+                cou.Name = rset.getString("country.Name");
+                cou.Continent = rset.getString("country.Continent");
+                cou.Region = rset.getString("country.Region");
+                cou.Population = rset.getInt("country.Population");
+                cou.Capital = rset.getString("country.Capital");
+                countries.add(cou);
+            }
+            return countries;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public ArrayList<Country> getNCountries(int N) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Code, Name, Continent, Region, Population, Capital "
+                            + "FROM country" + " "
+                            + "ORDER BY Population DESC "
+                            + "LIMIT " + N;
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
             // Extract employee information
@@ -195,35 +255,137 @@ public class App
         }
     }
 
+    public ArrayList<City> getNCities(int N) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name, country.Name, District, city.Population, city.CountryCode "
+                            + "FROM city, country "
+                            + "WHERE country.Code = city.CountryCode "
+                            + "ORDER BY Population DESC "
+                            + "LIMIT "+ N;
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract city information
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cit = new City();
+                cit.Name = rset.getString("city.Name");
+                cit.CountryCode = rset.getString("city.CountryCode");
+                cit.District = rset.getString("city.District");
+                cit.Population = rset.getInt("city.Population");
+
+                cities.add(cit);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get city details");
+            return null;
+        }
+    }
+
     public void printCitiesinOrder(ArrayList<City> cities, ArrayList<Country> countries){
         // Loop over all cities in the list
-        for (City cit : cities) {
-            String countryName = new String();
-            for(Country cou: countries) {
-                if (Objects.equals(cou.Code, cit.CountryCode))
-                {
-                    countryName = cou.Name;
-                    break; // stops loop when result is found to improve efficiency
+
+
+            for (City cit : cities) {
+                for (Country cou: countries) {
+                    if (cit.CountryCode.equals(cou.Code)) {
+
+
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " ");
+
+                    }
                 }
+
+        }
+    }
+
+    public void printCitiesInContinentOrdered(ArrayList<City> cities, ArrayList<Country> countries, String continent){
+
+        for (City cit : cities) {
+        for (Country cou: countries) {
+
+        if (cou.Continent.equals(continent)) {
+                    if(cit.CountryCode .equals(cou.Code)){
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " ");
+
+
+                    }
+                }
+
             }
-            System.out.println(
-                    cit.Name + " "
-                            + countryName + " "
-                            + cit.District + " "
-                            + cit.Population + " ");
+
 
         }
     }
 
-    public void displayCity(City cit) {
-        if (cit != null) {
-            System.out.println(
-                    cit.Name + " "
-                            + cit.CountryCode + " "
-                            + cit.District + " "
-                            + cit.Population + " ");
-        } else {
-            System.out.println("No city information available.");
+    public void printCitiesInRegionOrdered(ArrayList<City> cities, ArrayList<Country> countries, String region){
+
+        for (Country cou : countries) {
+            if (cou.Region .equals(region)){
+                for(City cit: cities){
+                    if(cit.CountryCode .equals(cou.Code)){
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " "
+                                       );
+                    }
+                }
+
+            }
         }
     }
-}
+
+    public void printCitiesInCountryOrdered(ArrayList<City> cities, ArrayList<Country> countries, String country){
+
+        for (Country cou : countries) {
+            if (cou.Name.equals(country)){
+                for(City cit: cities){
+                    if(cit.CountryCode .equals(cou.Code)){
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " "
+                        );
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    public void printCitiesInDistrictOrdered(ArrayList<City> cities, ArrayList<Country> countries, String district){
+
+
+        for (City cit : cities) {
+            if (cit.District .equals(district)){
+                for(Country cou: countries){
+                    if(cou.Code .equals(cit.CountryCode))
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " ");
+                    }
+                }
+
+            }
+        }
+    }
+
