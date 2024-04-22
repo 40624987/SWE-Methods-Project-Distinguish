@@ -60,11 +60,11 @@ public class App
         //a.printCitiesInCountryOrdered(cities, countries, "Germany");
 
         //List of all the cities in a district organised by largest population to smallest.
-        System.out.println(
-                "===============================\n" +
-                        "Cities in Districts in order of population\n"+
-                "City    Country    District    Population" );
-                       a.printCitiesInDistrictOrdered(cities, countries, "Rio de Janeiro");
+        //System.out.println(
+          //      "===============================\n" +
+          //              "Cities in Districts in order of population\n"+
+          //      "City    Country    District    Population" );
+          //             a.printCitiesInDistrictOrdered(cities, countries, "Rio de Janeiro");
 
 
 
