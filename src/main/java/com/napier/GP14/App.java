@@ -29,42 +29,42 @@ public class App
         //a.printCountriesinOrder(countries);
 
         //List of all Cities in order of descending population
-        System.out.println(
-                "===============================\n" +
-                       "All Cities in order of population\n"+
-                        "City    Country    District    Population" );
-        a.printCitiesinOrder(cities, countries);
+        //System.out.println(
+         //       "===============================\n" +
+         //              "All Cities in order of population\n"+
+          //              "City    Country    District    Population" );
+        //a.printCitiesinOrder(cities, countries);
 
         //List of all the cities in a continent organised by largest population to smallest.
         //System.out.println(
-        //       "===============================\n" +
-         //              "All cities in continent in order of population\n"+
+         //       "===============================\n" +
+         //       "All cities in continent in order of population\n"+
          //       "City    Country    District    Population" );
-        //a.printCitiesInContinentOrdered(cities, countries, "Europe");
+        //a.printCitiesInContinentOrdered(cities, countries, "Africa");
 
         //List of all the cities in a region organised by largest population to smallest.
 
         //System.out.println(
-         //      "===============================\n" +
-         //            "All cities in region in order of population\n"+
+          //     "===============================\n" +
+          //           "All cities in region in order of population\n"+
          //       "City    Country    District    Population" );
        // a.printCitiesInRegionOrdered(cities, countries, "Western Africa");
 
 
         //List of all the cities in a country organised by largest population to smallest.
-        //System.out.println(
-        //       "===============================\n" +
+       //System.out.println(
+       //        "===============================\n" +
         //               "Cities in Country in order of population\n"+
          //      "City    Country    District    Population" );
 
-       // a.printCitiesInCountryOrdered(cities, countries, "Germany");
+        //a.printCitiesInCountryOrdered(cities, countries, "Germany");
 
         //List of all the cities in a district organised by largest population to smallest.
-        //System.out.println(
-         //       "===============================\n" +
-         //               "Cities in Districts in order of population\n"+
-         //       "City    Country    District    Population" );
-            //            a.printCitiesInDistrictOrdered(cities, countries, "Rio de Janeiro");
+        System.out.println(
+                "===============================\n" +
+                        "Cities in Districts in order of population\n"+
+                "City    Country    District    Population" );
+                       a.printCitiesInDistrictOrdered(cities, countries, "Rio de Janeiro");
 
 
 
