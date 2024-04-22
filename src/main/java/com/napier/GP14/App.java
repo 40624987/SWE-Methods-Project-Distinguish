@@ -3,6 +3,7 @@ package com.napier.GP14;
 import java.sql.*;
 import java.util.ArrayList;
 
+
 public class App
 {
     public static void main(String[] args) {
@@ -298,203 +299,6 @@ public class App
             return null;
         }
     }
-
-
-
-
-
-
-
-        public int getTotalWorldPopulation() {
-            int totalPopulation = 0;
-            try {
-                // Create an SQL statement
-                Statement stmt = con.createStatement();
-                // Create string for SQL statement
-                String strSelect = "SELECT SUM(Population) AS TotalPopulation FROM city";
-                // Execute SQL statement
-                ResultSet rset = stmt.executeQuery(strSelect);
-                // Retrieve the total population
-                if (rset.next()) {
-                    totalPopulation = rset.getInt("TotalPopulation");
-                }
-            } catch (SQLException e) {
-                System.out.println("Failed to get total world population: " + e.getMessage());
-            }
-            return totalPopulation;
-        }
-
-    public int getTotalContinentPopulation(String continentName) {
-        int totalPopulation = 0;
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city JOIN country ON city.CountryCode = country.Code WHERE country.Continent = '" + continentName + "'";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Retrieve the total population
-            if (rset.next()) {
-                totalPopulation = rset.getInt("TotalPopulation");
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to get total population of " + continentName + ": " + e.getMessage());
-        }
-        return totalPopulation;
-    }
-
-    public int getTotalRegionPopulation(String regionName) {
-        int totalPopulation = 0;
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city JOIN country ON city.CountryCode = country.Code WHERE country.Region = '" + regionName + "'";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Retrieve the total population
-            if (rset.next()) {
-                totalPopulation = rset.getInt("TotalPopulation");
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to get total population of " + regionName + ": " + e.getMessage());
-        }
-        return totalPopulation;
-    }
-
-    public int getTotalCountryPopulation(String countryName) {
-        int totalPopulation = 0;
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city JOIN country ON city.CountryCode = country.Code WHERE country.Name = '" + countryName + "'";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Retrieve the total population
-            if (rset.next()) {
-                totalPopulation = rset.getInt("TotalPopulation");
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to get total population of " + countryName + ": " + e.getMessage());
-        }
-        return totalPopulation;
-    }
-
-    public int getTotalDistrictPopulation(String districtName) {
-        int totalPopulation = 0;
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city WHERE city.District = '" + districtName + "'";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Retrieve the total population
-            if (rset.next()) {
-                totalPopulation = rset.getInt("TotalPopulation");
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to get total population of " + districtName + ": " + e.getMessage());
-        }
-        return totalPopulation;
-    }
-
-    public int getCityPopulation(String cityName) {
-        int cityPopulation = 0;
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect = "SELECT Population FROM city WHERE Name = '" + cityName + "'";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Retrieve the city population
-            if (rset.next()) {
-                cityPopulation = rset.getInt("Population");
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to get population of " + cityName + ": " + e.getMessage());
-        }
-        return cityPopulation;
-    }
-
-
-
-
-
-    public ArrayList<City> getNCities(int N) {
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT city.Name, country.Name, District, city.Population, city.CountryCode "
-                            + "FROM city, country "
-                            + "WHERE country.Code = city.CountryCode "
-                            + "ORDER BY Population DESC "
-                            + "LIMIT "+ N;
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract city information
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City cit = new City();
-                cit.Name = rset.getString("city.Name");
-                cit.CountryCode = rset.getString("city.CountryCode");
-                cit.District = rset.getString("city.District");
-                cit.Population = rset.getInt("city.Population");
-
-                cities.add(cit);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get city details");
-            return null;
-        }
-    }
-
-    public void printCitiesinOrder(ArrayList<City> cities, ArrayList<Country> countries){
-        // Loop over all cities in the list
-
-
-        for (City cit : cities) {
-            for (Country cou: countries) {
-                if (cit.CountryCode.equals(cou.Code)) {
-
-
-                    System.out.println(
-                            cit.Name + " "
-                                    + cou.Name + " "
-                                    + cit.District + " "
-                                    + cit.Population + " ");
-
-                }
-            }
-
-        }
-    }
-
-    public void printCitiesInContinentOrdered(ArrayList<City> cities, ArrayList<Country> countries, String continent){
-
-        for (City cit : cities) {
-            for (Country cou: countries) {
-
-                if (cou.Continent.equals(continent)) {
-                    if(cit.CountryCode .equals(cou.Code)){
-                        System.out.println(
-                                cit.Name + " "
-                                        + cou.Name + " "
-                                        + cit.District + " "
-                                        + cit.Population + " ");
-
-
-                    }
-                }
-
-            }
-
 
     public void displayCity(City cit) {
         if (cit != null) {
@@ -834,6 +638,173 @@ public class App
     }
 
 
+    public int getTotalWorldPopulation() {
+            int totalPopulation = 0;
+            try {
+                // Create an SQL statement
+                Statement stmt = con.createStatement();
+                // Create string for SQL statement
+                String strSelect = "SELECT SUM(Population) AS TotalPopulation FROM city";
+                // Execute SQL statement
+                ResultSet rset = stmt.executeQuery(strSelect);
+                // Retrieve the total population
+                if (rset.next()) {
+                    totalPopulation = rset.getInt("TotalPopulation");
+                }
+            } catch (SQLException e) {
+                System.out.println("Failed to get total world population: " + e.getMessage());
+            }
+            return totalPopulation;
+        }
+
+    public int getTotalContinentPopulation(String continentName) {
+        int totalPopulation = 0;
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city JOIN country ON city.CountryCode = country.Code WHERE country.Continent = '" + continentName + "'";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Retrieve the total population
+            if (rset.next()) {
+                totalPopulation = rset.getInt("TotalPopulation");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get total population of " + continentName + ": " + e.getMessage());
+        }
+        return totalPopulation;
+    }
+
+    public int getTotalRegionPopulation(String regionName) {
+        int totalPopulation = 0;
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city JOIN country ON city.CountryCode = country.Code WHERE country.Region = '" + regionName + "'";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Retrieve the total population
+            if (rset.next()) {
+                totalPopulation = rset.getInt("TotalPopulation");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get total population of " + regionName + ": " + e.getMessage());
+        }
+        return totalPopulation;
+    }
+
+    public int getTotalCountryPopulation(String countryName) {
+        int totalPopulation = 0;
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city JOIN country ON city.CountryCode = country.Code WHERE country.Name = '" + countryName + "'";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Retrieve the total population
+            if (rset.next()) {
+                totalPopulation = rset.getInt("TotalPopulation");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get total population of " + countryName + ": " + e.getMessage());
+        }
+        return totalPopulation;
+    }
+
+    public int getTotalDistrictPopulation(String districtName) {
+        int totalPopulation = 0;
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect = "SELECT SUM(city.Population) AS TotalPopulation FROM city WHERE city.District = '" + districtName + "'";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Retrieve the total population
+            if (rset.next()) {
+                totalPopulation = rset.getInt("TotalPopulation");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get total population of " + districtName + ": " + e.getMessage());
+        }
+        return totalPopulation;
+    }
+
+    public int getCityPopulation(String cityName) {
+        int cityPopulation = 0;
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect = "SELECT Population FROM city WHERE Name = '" + cityName + "'";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Retrieve the city population
+            if (rset.next()) {
+                cityPopulation = rset.getInt("Population");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get population of " + cityName + ": " + e.getMessage());
+        }
+        return cityPopulation;
+    }
+
+
+
+
+
+
+
+    public void printCitiesinOrder(ArrayList<City> cities, ArrayList<Country> countries){
+        // Loop over all cities in the list
+
+
+        for (City cit : cities) {
+            for (Country cou: countries) {
+                if (cit.CountryCode.equals(cou.Code)) {
+
+
+                    System.out.println(
+                            cit.Name + " "
+                                    + cou.Name + " "
+                                    + cit.District + " "
+                                    + cit.Population + " ");
+
+                }
+            }
+
+        }
+    }
+
+    public void printCitiesInContinentOrdered(ArrayList<City> cities, ArrayList<Country> countries, String continent){
+
+        for (City cit : cities) {
+            for (Country cou: countries) {
+
+                if (cou.Continent.equals(continent)) {
+                    if(cit.CountryCode .equals(cou.Code)){
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " ");
+
+
+                    }
+                }
+
+            }
+        }
+
+
+
+
+
+
+
 
 
 
@@ -846,5 +817,4 @@ public class App
 
 
 
-}
 }
