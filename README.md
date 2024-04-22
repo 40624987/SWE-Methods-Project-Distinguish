@@ -22,11 +22,11 @@ Reports Screenshots
 | 9     | All the cities in a region organised by largest population to smallest. (Western Africa) | Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/af6e79f0-467e-4eb1-b094-69fe842a0e46)|
 | 10     | All the cities in a country organised by largest population to smallest. (Germany) | Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/9171e34f-5cd0-493a-8c5a-2b40f0b9b1eb) |
 | 11     | All the cities in a district organised by largest population to smallest. (Rio de Janeiro) | Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/c4ec9a61-3833-46e7-9e8f-5b1977d72cbf)|
-| 12     | The top N populated cities in the world where N is provided by the user. (N=8) | Yes ||
-| 13     | The top N populated cities in a continent where N is provided by the user. (N=8, Europe) | Yes | |
-| 14     | The top N populated cities in a region where N is provided by the user. (N=8, Caribbean)| Yes ||
-| 15     | The top N populated cities in a country where N is provided by the user. (N=8, Spain) | Yes | |
-| 16     | The top N populated cities in a district where N is provided by the user. (N=3, Aichi) | Yes ||
+| 12     | The top N populated cities in the world where N is provided by the user. (N=8) | Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/a68784c1-0dbc-4207-8e6a-7395ca471335)|
+| 13     | The top N populated cities in a continent where N is provided by the user. (N=7, Africa) | Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/cb94178a-562a-4df3-b46c-75a4d7371da1) |
+| 14     | The top N populated cities in a region where N is provided by the user. (N=10, Western Africa)| Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/3fd665c0-4798-48ba-b575-5d7cdeee5a52)|
+| 15     | The top N populated cities in a country where N is provided by the user. (N=3, Nigeria) | Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/38271775-d642-469d-90c8-a4324a598ddb) |
+| 16     | The top N populated cities in a district where N is provided by the user. (N=5, Rio de Janeiro) | Yes |![image](https://github.com/40624987/SWE-Methods-Project-Distinguish/assets/157693583/f08d7053-7a42-4da6-8bea-930b9952526e)|
 | 17    | All the capital cities in the world organised by largest population to smallest. | Yes ||
 | 18    | All the capital cities in a continent organised by largest population to smallest. | Yes ||
 | 19    | All the capital cities in a region organised by largest to smallest. | Yes ||
