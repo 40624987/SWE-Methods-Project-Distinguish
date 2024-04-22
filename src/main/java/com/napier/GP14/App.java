@@ -19,22 +19,28 @@ public class App
         ArrayList<Country> countries = a.getAllCountries();
 
         //List of all Countries in order of descending population
+        //System.out.println("Code  Name  Continent  Region  Population  Capital\n--------------------------------------------------");
         //a.printCountriesinOrder(countries);
 
         //List of the top N populated countries in the world where N is provided by the user.
+        //System.out.println("Code  Name  Continent  Region  Population  Capital\n--------------------------------------------------");
         //a.printCountriesinOrderN(countries, 10);
 
         //List of all the countries in a continent organised by largest population to smallest.
-        //a.printCountriesInContinentOrdered(countries, "Africa");
+        //System.out.println("Code  Name  Continent  Region  Population  Capital\n--------------------------------------------------");
+        //a.printCountriesInContinentOrdered(countries, "Europe");
 
         //List of all the countries in a region organised by largest population to smallest.
+        //System.out.println("Code  Name  Continent  Region  Population  Capital\n--------------------------------------------------");
         //a.printCountriesInRegionOrdered(countries, "Western Africa");
 
         // List of the top N populated countries in a continent where N is provided by the user.
+        //System.out.println("Code  Name  Continent  Region  Population  Capital\n--------------------------------------------------");
         //a.printCountriesinContinentsOrderN(countries, "Europe", 10);
 
         // List of the top N populated countries in a region where N is provided by the user.
-        a.printCountriesInRegionOrderN(countries, "Eastern Europe", 5);
+        //System.out.println("Code  Name  Continent  Region  Population  Capital\n--------------------------------------------------");
+        //a.printCountriesInRegionOrderN(countries, "Eastern Europe", 5);
 
 
 
@@ -141,8 +147,41 @@ public class App
         }
     }
 
+    public ArrayList<City> getAllCities() {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name, country.Name, District, city.Population, city.CountryCode, city.ID "
+                            + "FROM city, country "
+                            + "WHERE country.Code = city.CountryCode "
+                            + "ORDER BY Population DESC";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract city information
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cit = new City();
+                cit.Name = rset.getString("city.Name");
+                cit.CountryCode = rset.getString("city.CountryCode");
+                cit.District = rset.getString("city.District");
+                cit.Population = rset.getInt("city.Population");
+                cit.ID = rset.getInt("city.ID");
+
+                cities.add(cit);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get city details");
+            return null;
+        }
+    }
+
+
     public void printCountriesinOrder(ArrayList<Country> countries){
-         // Loop over all employees in the list
+         // Loop over all countries in the list
         for (Country cou : countries) {
             System.out.println(
                     cou.Code + " "
