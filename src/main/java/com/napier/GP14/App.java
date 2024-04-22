@@ -66,6 +66,44 @@ public class App
           //      "City    Country    District    Population" );
           //             a.printCitiesInDistrictOrdered(cities, countries, "Rio de Janeiro");
 
+        //List of N cities in a District where N is provided by the user
+        //System.out.println(
+          //    "===============================\n" +
+         //             "Cities in Districts in order of population\n"+
+          //    "City    Country    District    Population" );
+          //      a.printCitiesInDistrictOrderN(cities, countries, "Rio de Janeiro", 5  );
+
+
+
+        //List of N cities in a Continents where N is provided by the user
+        //System.out.println(
+        //       "===============================\n" +
+         //               "Cities in Continents in order of population\n"+
+         //               "City    Country    District    Population" );
+        //a.printCitiesInContinentOrderN(cities, countries, "Africa", 7  );
+
+        //List of N cities in a Country where N is provided by the user
+        //System.out.println(
+        //        "===============================\n" +
+          //              "Cities in Country in order of population\n"+
+          //              "City    Country    District    Population" );
+        //a.printCitiesInCountryOrderN(cities, countries, "Nigeria", 3);
+
+        //List of N cities in a Region where N is provided by the user
+        //System.out.println(
+         //               "Cities in Region in order of population\n"+
+         //               "City    Country    District    Population" );
+       // a.printCitiesInRegionOrderN(cities, countries, "Western Africa", 10);
+
+        //List of top populated N cities in the world where N is provided by the user
+        System.out.println(
+                "===============================\n" +
+                        "Cities in World in order of population\n"+
+                        "City    Country    District    Population" );
+
+        a.printCitiesInOrderN(cities, countries, 5);
+
+
 
 
 
@@ -161,37 +199,9 @@ public class App
         }
     }
 
-    public ArrayList<Country> getNCountries(int N) {
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT Code, Name, Continent, Region, Population, Capital "
-                            + "FROM country" + " "
-                            + "ORDER BY Population DESC "
-                            + "LIMIT " + N;
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract employee information
-            ArrayList<Country> countries = new ArrayList<Country>();
-            while (rset.next()) {
-                Country cou = new Country();
-                cou.Code = rset.getString("country.Code");
-                cou.Name = rset.getString("country.Name");
-                cou.Continent = rset.getString("country.Continent");
-                cou.Region = rset.getString("country.Region");
-                cou.Population = rset.getInt("country.Population");
-                cou.Capital = rset.getString("country.Capital");
-                countries.add(cou);
-            }
-            return countries;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
-            return null;
-        }
-    }
+
+
+
 
     public void printCountriesinOrder(ArrayList<Country> countries){
         // Print header
@@ -371,5 +381,183 @@ public class App
 
             }
         }
+    public void printCitiesInDistrictOrderN(ArrayList<City> cities, ArrayList<Country> countries, String district, int n){
+        // Loop over all employees in the list
+        int i = 0;
+
+        // end loop when i goes past number specified
+        for (City cit : cities) {
+            if(i >= n){
+                break;
+            }
+
+            //print cities in the specified district
+            if (cit.District .equals(district)){
+                for(Country cou: countries){
+                    if(cou.Code .equals(cit.CountryCode)) {
+                        System.out.println(
+                                cit.Name + " "
+                                        + cou.Name + " "
+                                        + cit.District + " "
+                                        + cit.Population + " ");
+
+                    i++;
+                    break;
+                    }
+                }
+            }
+
+        }
     }
+
+    public void printCitiesInContinentOrderN(ArrayList<City> cities, ArrayList<Country> countries, String continent, int n) {
+        // Initialize counter
+        int i = 0;
+
+        // Iterate over cities
+        for (City cit : cities) {
+            // Check if the limit is reached
+            if (i >= n) {
+                break;
+            }
+
+            // Check if the city belongs to the specified continent
+            for (Country cou : countries) {
+                if (cou.Continent.equals(continent) && cit.CountryCode.equals(cou.Code)) {
+                    // Print city information
+                    System.out.println(
+                            cit.Name + " "
+                                    + cou.Name + " "
+                                    + cit.District + " "
+                                    + cit.Population
+                    );
+
+                    // Increment the counter
+                    i++;
+                    break; // Break out of the inner loop once the city is printed
+                }
+            }
+        }
+    }
+
+    public void printCitiesInCountryOrderN(ArrayList<City> cities, ArrayList<Country> countries, String country, int n) {
+        // Initialize counter
+        int count = 0;
+
+        // Iterate over cities
+        for (City cit : cities) {
+            // Check if the limit is reached
+            if (count >= n) {
+                break;
+            }
+
+            // Check if the city belongs to the specified country
+            for (Country cou : countries) {
+                if (cou.Name.equals(country) && cit.CountryCode.equals(cou.Code)) {
+                    // Print city information
+                    System.out.println(
+                            cit.Name + " "
+                                    + cou.Name + " "
+                                    + cit.District + " "
+                                    + cit.Population
+                    );
+
+                    // Increment the counter
+                    count++;
+
+                    // Exit the loop once a city from the specified country is found
+                    break;
+                }
+            }
+        }
+    }
+
+    public void printCitiesInRegionOrderN(ArrayList<City> cities, ArrayList<Country> countries, String region, int n) {
+        // Initialize counter
+        int count = 0;
+
+        // Iterate over cities
+        for (City cit : cities) {
+            // Check if the limit is reached
+            if (count >= n) {
+                break;
+            }
+
+            // Check if the city belongs to the specified region
+            for (Country cou : countries) {
+                if (cou.Region.equals(region) && cit.CountryCode.equals(cou.Code)) {
+                    // Print city information
+                    System.out.println(
+                            cit.Name + " "
+                                    + cou.Name + " "
+                                    + cit.District + " "
+                                    + cit.Population
+                    );
+
+                    // Increment the counter
+                    count++;
+
+                    // Exit the loop once a city from the specified region is found
+                    break;
+                }
+            }
+        }
+    }
+
+    public void printCitiesInOrderN(ArrayList<City> cities, ArrayList<Country> countries, int n) {
+        // Initialize counter
+        int count = 0;
+
+        // Loop over all cities in the list
+        for (City cit : cities) {
+            // Check if the limit is reached
+            if (count >= n) {
+                break;
+            }
+
+            // Find the country to which the city belongs
+            for (Country cou : countries) {
+                if (cit.CountryCode.equals(cou.Code)) {
+                    // Print city information
+                    System.out.println(
+                            cit.Name + " "
+                                    + cou.Name + " "
+                                    + cit.District + " "
+                                    + cit.Population
+                    );
+
+                    // Increment the counter
+                    count++;
+
+                    // Exit the inner loop once the city is printed
+                    break;
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
